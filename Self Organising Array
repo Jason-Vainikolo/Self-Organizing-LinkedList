@@ -1,0 +1,279 @@
+package Question1;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+/**
+ *
+ * @author Jason Vainikolo
+ * @studentID 16961397
+ */
+public class SelfOrganisingArray<E> implements List<E> {
+
+    private int countElement;
+    private E[] list;
+    private int[] accessCounterList;
+    private int numElements;
+
+    public SelfOrganisingArray() 
+    {
+        super();
+        this.countElement = 0;
+        this.list = (E[]) new Object[5];
+        this.accessCounterList = new int[5];
+        this.numElements = 0;
+    }
+
+    @Override
+    public int size() 
+    {
+        return this.countElement;
+    }
+
+    @Override
+    public boolean isEmpty() 
+    {
+        for(int i = 0; i < this.list.length; i++)
+        {
+            if(this.list[i] == null)
+            {
+                return true;
+            }            
+        }
+        return false;
+    }
+
+    @Override
+    public boolean contains(Object o) 
+    {
+        for (int i = 0; i < this.list.length; i++) 
+        {
+            if (this.list[i] == o) 
+            {
+                this.accessCounterList[i]++;
+                this.bubbleSort(accessCounterList);
+                return true;
+            }
+        }
+        
+        System.out.println("Doesn't Exist");
+        return false;
+    }
+
+    //Expands the array capacity
+    private void expandCapacity() 
+    {   
+        //Expands the Array of list
+        E[] largerListArray = (E[]) (new Object[this.list.length * 2]);
+        for (int i = 0; i < this.list.length; i++) 
+        {
+            largerListArray[i] = this.list[i];
+        }
+        
+        //expands the array of access Counter
+        int[] largerAccessCounterArray = new int[this.list.length * 2];
+        for (int i = 0; i < this.list.length; i++) 
+        {
+            largerAccessCounterArray[i] = this.accessCounterList[i];
+        }
+
+        this.list = largerListArray;
+        this.accessCounterList = largerAccessCounterArray;
+    }
+    
+    @Override
+    public Iterator<E> iterator() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Object[] toArray() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    //Adds element into the List array and increments the accessCounter of the 
+    //AccessCounterArray at the same position that mirrors the array
+    @Override
+    public boolean add(E e) 
+    {
+        if((this.list[this.list.length-1] == null) && this.list[0] == this.list[this.list.length-1])
+        {
+            expandCapacity();
+        }
+        
+        for(int i = 0; i < this.list.length; i++)
+        {
+            if(this.list[i] == e)
+            {
+                this.accessCounterList[i]++;
+            }
+            this.list[this.list.length-5] = e;
+            this.numElements++;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) 
+    {
+        for(int i = 0; i < this.list.length; i++)
+        {
+            if(this.list[i] == o)
+            {
+                this.list[i] = null;
+                this.accessCounterList[i] = 0;
+                return true;
+            }
+        }
+        
+        System.out.println("Element Doesn't Exist");
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) 
+    {
+        for (int i = 0; i <= this.list.length - 1; i++) 
+        {
+            this.list[i] = null;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    //Clears the array of element and accessCounter
+    @Override
+    public void clear() 
+    {
+        for (int i = 0; i <= this.list.length - 1; i++) 
+        {
+            this.list[i] = null;
+            this.accessCounterList[i] = 0;
+        }
+    }
+
+    @Override
+    public E get(int index) 
+    {
+        return this.list[index];
+    }
+
+    @Override
+    public E set(int index, E element) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void add(int index, E element) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    //Removes an element at a specific index
+    @Override
+    public E remove(int index) {
+        for (int i = 0; i <= index - 1; i++) {
+            if (i == index - 1) {
+                this.list[i] = null;
+                this.accessCounterList[i] = 0;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ListIterator<E> listIterator() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public int[] bubbleSort(int[] accessCounter)
+    {
+        for(int j = 0; j < accessCounter.length; j++)
+        {
+            if(accessCounter[j] > accessCounter[j])
+            {
+                int swap = accessCounter[j];
+                accessCounter[j] = accessCounter[j+1];
+                accessCounter[j+1] = swap;
+            }
+        }
+        
+        return accessCounter;
+    }
+    
+    @Override
+    public String toString() 
+    {
+        for(int i = 0; i < this.list.length; i++)
+        {
+            if(!(this.list[i] == null))
+            {
+                System.out.println(this.list[i] + "(" + this.accessCounterList[i] + ")");
+            }
+        }
+        return "Done!";
+    }
+
+    public static void main(String[] args) 
+    {
+        SelfOrganisingArray<String> list = new SelfOrganisingArray<String>();
+        
+        list.add("A");
+        list.add("B");
+        list.add("C");
+        list.add("D");
+        list.add("E");
+        
+        list.contains("C");
+        
+        System.out.println(list.get(15));
+        
+        System.out.println(list.toString());
+    }
+
+}
