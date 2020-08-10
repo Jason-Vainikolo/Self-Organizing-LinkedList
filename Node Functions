@@ -1,0 +1,95 @@
+package Question1;
+
+import java.util.List;
+
+
+/**
+ *
+ * @author Jason Vainikolo
+ * @studentID 16961397
+ */
+public abstract class SelfOrganizingLinkedList<E extends Comparable<E>> implements List<E>
+{
+    protected Node<E> firstNode;
+    protected int numElements;
+    
+    public SelfOrganizingLinkedList()
+    {
+        super();
+    }
+    
+    @Override
+    public boolean add(E target) 
+    {
+        Node<E> newNode = new Node<E>(target);
+        if (firstNode == null || target.compareTo(firstNode.element) < 0) 
+        {
+            //Checks the first position of the removeList
+            //if element already exist
+            if (firstNode != null && target.equals(firstNode.element)) 
+            {
+                System.out.println(firstNode.element + " already exist");
+                return false;
+            }
+
+            //Creates a newNode
+            newNode.next = firstNode;
+            firstNode = newNode;
+            numElements++;
+            return true;
+        } 
+        else 
+        {
+            Node<E> currentNode = firstNode;
+            
+            //To check if the element in the first position is null then returns false
+            if (firstNode != null && target.equals(firstNode.element)) 
+            {
+                System.out.println(firstNode.element + " already exist");
+                return false;
+            }
+            while (currentNode.next != null && target.compareTo(currentNode.next.element) >= 0) 
+            {
+                
+                //Checking the middle of the removeList to see
+                //if it already exist
+                if (currentNode != null && target.equals(currentNode.next.element)) 
+                {
+                    System.out.println(currentNode.next.element + " already exist");
+                    return false;
+                }
+                currentNode = currentNode.next;
+            }
+
+            newNode.next = currentNode.next;
+            currentNode.next = newNode;
+            numElements++;
+            return true;
+        }
+    }
+    
+    public boolean remove(E target1) 
+    {
+        return true;
+    }
+
+    
+    protected class Node<E> 
+    {
+
+        public E element;
+        public Node<E> next;
+
+        public Node(E element) 
+        {
+            this.element = element;
+            next = null;
+        }
+    }
+    
+    
+    public static void main(String[] args)
+    {
+        
+    }
+}
